@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from mtma_test import mtma
 
 
 @dataclass
@@ -30,11 +31,11 @@ class Actor:
 
 
 message = "Hi Ryan!"
-p = 23
-g = 5
+p = 1009  # prime
+g = 439  # primitive root
 
-alice = Actor(4)
-bob = Actor(3)
+alice = Actor(41)
+bob = Actor(245)
 
 alice.gen_public_key(p, g)
 bob.gen_public_key(p, g)
@@ -47,3 +48,7 @@ decoded_message = bob.decode_message(encoded_message)
 
 print(encoded_message)
 print(decoded_message)
+
+mitm = mtma(p, g, bob.public_key)
+
+print(mitm)
