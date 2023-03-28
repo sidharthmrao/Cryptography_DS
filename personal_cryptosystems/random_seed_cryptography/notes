@@ -1,0 +1,9 @@
+Random seed into some sort of seeded random generator.
+Step the random function by a predecided random amount.
+The random step (gamma) is saved inside another file, encoded by an internal seed.
+The internal seed is also stepped by a certain amount, saved inside the same file.
+Every time the file is read, the random step is applied to the random seed, the internal seed is stepped by the internal seed step, and the file is saved again using the new random seed and internal seed.
+
+NVM hiding the step function doesn't work.
+
+Random seed still works though.
