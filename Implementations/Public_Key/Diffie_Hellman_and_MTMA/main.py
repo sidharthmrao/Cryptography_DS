@@ -15,24 +15,36 @@ class Actor:
         self.__shared_secret = (other_actor.public_key ** self.__private_key) % p
 
     def encode_message(self, msg: str):
-        msg = msg.encode("utf-8")
-        c = b""
-        for byte in msg:
-            c += bytes([byte ^ self.__shared_secret])
+        encrypted = [int(ord(char) * self.__shared_secret) for char in msg]
 
-        return c
+        return encrypted
 
-    def decode_message(self, msg: bytes):
-        m = b""
-        for byte in msg:
-            m += bytes([byte ^ self.__shared_secret])
+    def decode_message(self, msg: list):
+        decrypted = [chr(int(char / self.__shared_secret)) for char in msg]
 
-        return m.decode("utf-8")
+        return "".join(decrypted)
+
+
+class Adversary:
+    def __init__(self, msg: list, p: int, g: int, actor_1: Actor, actor_2: Actor):
+        self.p = p
+        self.g = g
+        self.actor_1 = actor_1
+        self.actor_2 = actor_2
+        self.msg = msg
+
+    def decode_message(self):
+        iters, b = mtma(p, g, self.actor_2.public_key)
+        secret_key = (self.actor_1.public_key ** b) % p
+
+        decrypted = [chr(int(char / secret_key)) for char in self.msg]
+
+        return iters, "".join(decrypted)
 
 
 message = "Hi Ryan!"
-p = 1009  # prime
-g = 439  # primitive root
+p = 13921  # prime
+g = 433  # primitive root
 
 alice = Actor(41)
 bob = Actor(245)
@@ -47,8 +59,12 @@ encoded_message = alice.encode_message(message)
 decoded_message = bob.decode_message(encoded_message)
 
 print(encoded_message)
-print(decoded_message)
 
-mitm = mtma(p, g, bob.public_key)
+alice = Adversary(encoded_message, p, g, alice, bob)
+# print(alice.decode_message())
 
-print(mitm)
+total_tries = 0
+for i in range(100):
+    total_tries += alice.decode_message()[0]
+
+print(total_tries / 100)
