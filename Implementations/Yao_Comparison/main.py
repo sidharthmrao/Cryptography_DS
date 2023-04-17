@@ -1,4 +1,5 @@
 import _sha256
+import random
 
 bit_length = 100
 
@@ -38,3 +39,19 @@ a = set(alice(183473))
 b = set(bob(183448))
 
 print(a.intersection(b))
+
+valid = 0
+
+for i in range(100):
+    num_a = random.randint(0, 999999999)
+    num_b = random.randint(0, 999999999)
+
+    real = num_a > num_b
+    est = len(set(alice(num_a)).intersection(set(bob(num_b)))) > 0
+
+    if real == est:
+        valid += 1
+
+print(valid)
+
+
