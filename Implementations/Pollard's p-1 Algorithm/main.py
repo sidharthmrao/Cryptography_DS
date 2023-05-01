@@ -1,30 +1,50 @@
 import math
 from Crypto.Util.number import isPrime
+from tqdm import tqdm
 
 
-def pollard(n):
-    a = 2
-    e = 2
+def pollard(a, e, n):
+    max_iter = 100
+    iters = 0
 
     d = 1
     while d == 1:
         a = pow(a, e, n)
         d = math.gcd(a - 1, n)
-
         e += 1
+        iters += 1
+
+        if d == n:
+            return None
+        elif iters > max_iter:
+            return None
 
     return d
 
 
-num = 3*7*11
+num = 11 * 23 * 37 * 3 * 13 * 11
 factors = []
 
-while not isPrime(num):
-    factor = pollard(num)
-    factors.append(factor)
-    num //= factor
+iter_counts = []
 
-    if isPrime(num):
-        factors.append(num)
+for i in tqdm(range(2, 50)):
+    new_num = num
+    factors = []
+    iter_counts.append(0)
+    while not isPrime(new_num):
+        factor = pollard(i, 2, new_num)
+        if factor is None:
+            iter_counts[-1] = 1000
+            break
+        factors.append(factor)
+        new_num //= factor
 
-print(factors)
+        if isPrime(new_num):
+            factors.append(new_num)
+
+        iter_counts[-1] += 1
+
+    print(factors)
+
+for i, num in enumerate(iter_counts):
+    print(i+2, num)
