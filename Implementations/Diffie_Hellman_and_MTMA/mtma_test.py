@@ -1,5 +1,6 @@
 from random import randint
 
+
 def mtma(p, g, B):
     compute_table = {}
     multiplied_compute_table = {}
