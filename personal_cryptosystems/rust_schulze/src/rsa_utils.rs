@@ -21,7 +21,6 @@ struct KeyPair {
 
 pub struct RSA {
     key_pair: KeyPair,
-    rng: rand::rngs::ThreadRng,
 }
 
 impl RSA {
@@ -32,13 +31,11 @@ impl RSA {
             key_pair: KeyPair {
                 public_key,
                 private_key,
-            },
-            rng,
+            }
         }
     }
 
     pub fn load() -> RSA {
-        let mut rng = rand::thread_rng();
         let public_key = DecodeRsaPublicKey::read_pkcs1_der_file("data/public_key.der").expect("failed to read public key");
         let private_key = DecodeRsaPrivateKey::read_pkcs1_der_file("data/private_key.der").expect("failed to read private key");
 
@@ -47,7 +44,6 @@ impl RSA {
                 public_key,
                 private_key,
             },
-            rng,
         }
     }
 

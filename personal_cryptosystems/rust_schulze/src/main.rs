@@ -1,9 +1,9 @@
+use crate::rsa_utils::RSA;
+
 mod rsa_utils;
-use rsa_utils::RSA;
+mod server;
+mod schulze;
 
 fn main() {
-    let rsa = RSA::load();
-    let enc_data = rsa.encrypt("hello world");
-    let dec_data = rsa.decrypt(&enc_data);
-    println!("{}", dec_data);
+    server::initialize();
 }
