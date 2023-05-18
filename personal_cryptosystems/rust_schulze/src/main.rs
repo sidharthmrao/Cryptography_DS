@@ -3,12 +3,10 @@ mod server;
 mod schulze;
 mod attendance;
 
-use attendance::AttendanceGen;
+use attendance::AttendanceUtil;
 
 fn main() {
-    let mut attend = AttendanceGen::load();
-    attend.generate(None);
-    attend.store_initial_hashes();
+    let mut attend = AttendanceUtil::load();
 
-    server::initialize();
+    server::initialize(&mut attend);
 }

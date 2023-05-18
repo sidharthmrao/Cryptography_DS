@@ -19,5 +19,6 @@ Cargo.lock
 rust-project.json
 
 data/*
+!data/.gitkeep
 
 
