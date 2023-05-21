@@ -55,9 +55,6 @@ impl AttendanceUtil {
             }
         }
 
-        println!("Password: {}", password);
-        println!("Initial hashes: {:?}", initial_hashes);
-
         AttendanceUtil {
             session_gen: initial_hashes,
             password,
@@ -111,8 +108,6 @@ impl AttendanceUtil {
 
         let mut prev = chain.get(0).unwrap().to_string();
         chain.remove(0);
-
-        println!("{:?}", prev.to_string());
 
         if self.session_gen.contains(&prev) {
             count += 1;

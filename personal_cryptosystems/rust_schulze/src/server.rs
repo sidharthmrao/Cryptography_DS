@@ -33,8 +33,6 @@ pub fn handle_connection(mut stream: TcpStream, attendance: &mut AttendanceUtil)
         for line in request.by_ref() {
             let line = line.unwrap();
 
-            println!("Line: {}", line);
-
             if line.contains("{") {
                 begin_pushing = true;
                 request_body.push(line);
@@ -51,6 +49,8 @@ pub fn handle_connection(mut stream: TcpStream, attendance: &mut AttendanceUtil)
         let mut vote: Vote = serde_json::from_str(&body).unwrap();
         let mut decoded_vote = vote.decode();
         decoded_vote.determine_weightage(attendance);
+
+        println!("{:?}", decoded_vote);
         decoded_vote.write_to_file("data/public_votes");
 
         status_line = "HTTP/1.1 200 OK";
