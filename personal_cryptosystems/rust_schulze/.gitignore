@@ -20,5 +20,6 @@ rust-project.json
 
 data/*
 !data/.gitkeep
+!data/public_key.der
 
 
